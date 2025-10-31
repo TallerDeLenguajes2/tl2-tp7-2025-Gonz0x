@@ -21,15 +21,39 @@ namespace tl2_tp7_2025_Gonz0x
             var productos = _productoRepository.ListarProductos();
             return Ok(productos);
         }
+    
+        [HttpPost("CrearProducto")]
+        public ActionResult CrearProducto([FromBody] Productos nuevoProducto)
+        {
+            _productoRepository.CrearProducto(nuevoProducto);
+            return Ok($"Producto '{nuevoProducto.Descripcion}' creado correctamente.");
+            
+        }
+        
+        [HttpPut("{id}")]
+        public ActionResult ModificarProducto(int id, [FromBody] Productos productoModificado)
+        {
+            _productoRepository.ModificarProducto(id, productoModificado);
+            return Ok($"Producto con ID {id} modificado correctamente.");
+        }
 
-        // A partir de aquí van todos los demás Action Methods (Get, Post, etc.)
+        [HttpGet("{id}")]
+        public ActionResult<Productos> ObtenerProductoPorId(int id)
+        {
+            var producto = _productoRepository.ObtenerProductoPorId(id);
+            if (producto == null)
+            {
+                return NotFound($"No se encontró un producto con ID {id}.");
+            }
+            return Ok(producto);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult EliminarProducto(int id)
+        {
+            _productoRepository.EliminarProducto(id);
+            return Ok($"Producto con ID {id} eliminado correctamente.");
+        }
+
     }
 }
-
-// Ejemplo de cómo dar de alta un producto
-// [HttpPost("AltaProducto")]
-//  public ActionResult<string> AltaProducto(Producto nuevoProducto)
-//  {
-//  productoRepository.Alta(nuevoProducto);
-//  return Ok("Producto dado de alta exitosamente");
-// }
